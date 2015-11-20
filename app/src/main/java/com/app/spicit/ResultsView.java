@@ -383,7 +383,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                             }
                             intf.setAttribute("UserTag", customtag);
                             
-                            Log.d(TAG, "xxxx PATH : " + path + " customtag - " + customtag );
+                            //Log.d(TAG, "xxxx PATH : " + path + " customtag - " + customtag );
                             
                     	
                             try {
@@ -618,7 +618,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
 				if (mList.size() == 0 || mList == null)
 					return;
                 String path = mList.get(position);
-                Log.d(TAG, "path " + path);
+                //Log.d(TAG, "path " + path);
                 if (path == null || path == "")
                 	return;
                 try {
@@ -632,7 +632,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                 }
                 String tag = intf.getAttribute("UserTag");
                 
-                Log.d(TAG, "xxxx PATH : " + path + " tag - " + tag );
+                //Log.d(TAG, "xxxx PATH : " + path + " tag - " + tag );
                 
                
                 CustomViewFlipper flipper = (CustomViewFlipper) v; 
@@ -1253,7 +1253,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
 	        	// TODO Auto-generated method stub
 	        	super.onPreExecute();
 	        	if( Math.abs(mScrollTo-position) > 20) {
-	            	   Log.d(TAG, "1. CANCEL this task - mScrollTo : " + mScrollTo + " position : " + position);
+	            	   //Log.d(TAG, "1. CANCEL this task - mScrollTo : " + mScrollTo + " position : " + position);
 	        		cancel(true);
 	        		//imageViewReference.clear();
 	        	}
@@ -1265,11 +1265,11 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                try {
             	   index = Integer.parseInt(String.valueOf(params[0]));
             	} catch(NumberFormatException nfe) {
-            		Log.d(TAG, "Ooops ! Error ");
+            		///Log.d(TAG, "Ooops ! Error ");
             	} 
         	   //int index = -1;
                if( Math.abs(mScrollTo-position) > 20) {
-            	   Log.d(TAG, "1. CANCEL this task - mScrollTo : " + mScrollTo + " position : " + position);
+            	   //Log.d(TAG, "1. CANCEL this task - mScrollTo : " + mScrollTo + " position : " + position);
 	        		cancel(true);
 	        		return null;
 	        		//imageViewReference.clear();
@@ -1277,13 +1277,13 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         	   
                if (index == -1 || index > mList.size()) {// (Math.abs(mScrollTo-index) > 20) ) {
             	   //flipper.setDisplayedChild(0);
-            	   Log.d(TAG, "2. CANCEL this task - index is -1 ? : " + index);
+            	   //Log.d(TAG, "2. CANCEL this task - index is -1 ? : " + index);
 
             	   cancel(true);
             	   return null;
                }
                
-               Log.d(TAG, "In BitmapWorkerTask Current POS :  " + mScrollTo + " - This task position : " + position + " - This Index position : " + index + " Math.abs(mScrollTo-position)  - " + Math.abs(mScrollTo-position));
+               //Log.d(TAG, "In BitmapWorkerTask Current POS :  " + mScrollTo + " - This task position : " + position + " - This Index position : " + index + " Math.abs(mScrollTo-position)  - " + Math.abs(mScrollTo-position));
                final Bitmap bitmap = getPicture(mList.get(index));
                //Log.d(TAG, "From BitmapWorkerTask --> AddLruPPhoto @ pos " + index + " bitmap  - " + bitmap);
                if( Math.abs(mScrollTo-position) < 20) {
@@ -1295,7 +1295,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
            @Override
            protected void onPostExecute(Bitmap bitmap) {
         	   if( Math.abs(mScrollTo-position) > 20) {
-            	   Log.d(TAG, "3. CANCEL this task - mScrollTo : " + mScrollTo + " position : " + position);
+            	   //Log.d(TAG, "3. CANCEL this task - mScrollTo : " + mScrollTo + " position : " + position);
         		   cancel(true);
         	   }
         	   if (isCancelled()) {
@@ -1335,8 +1335,8 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         int GCD=BigInteger.valueOf(imageHeight).gcd(BigInteger.valueOf(imageWidth)).intValue();
         imaheVerticalAspectRatio=imageHeight/GCD;
         imageHorizontalAspectRatio=imageWidth/GCD;
-        Log.i("scaleDownLargeImageWIthAspectRatio","Image Dimensions(W:H): "+imageWidth+":"+imageHeight);
-        Log.i("scaleDownLargeImageWIthAspectRatio","Image AspectRatio(W:H): "+imageHorizontalAspectRatio+":"+imaheVerticalAspectRatio);
+        //Log.i("scaleDownLargeImageWIthAspectRatio","Image Dimensions(W:H): "+imageWidth+":"+imageHeight);
+        //Log.i("scaleDownLargeImageWIthAspectRatio","Image AspectRatio(W:H): "+imageHorizontalAspectRatio+":"+imaheVerticalAspectRatio);
 
         //getContainer Dimensions
         //int displayWidth = getWindowManager().getDefaultDisplay().getWidth();
@@ -1351,7 +1351,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         int bottomMargin = 0;
         int containerWidth = displayWidth - (leftMargin + rightMargin);
         int containerHeight = displayHeight - (topMargin + bottomMargin);
-        Log.i("scaleDownLargeImageWIthAspectRatio","Container dimensions(W:H): "+containerWidth+":"+containerHeight);
+        //Log.i("scaleDownLargeImageWIthAspectRatio","Container dimensions(W:H): "+containerWidth+":"+containerHeight);
 
         //iterate to get bestFitScaleFactor per constraints
         while((imageHorizontalAspectRatio*bestFitScalingFactor <= containerWidth) && 
@@ -1363,8 +1363,8 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         //return bestFit bitmap
         int bestFitHeight=(int) (imaheVerticalAspectRatio*bestFitScalingFactor);
         int bestFitWidth=(int) (imageHorizontalAspectRatio*bestFitScalingFactor);
-        Log.i("scaleDownLargeImageWIthAspectRatio","bestFitScalingFactor: "+bestFitScalingFactor);
-        Log.i("scaleDownLargeImageWIthAspectRatio","bestFitOutPutDimesions(W:H): "+bestFitWidth+":"+bestFitHeight);
+        //Log.i("scaleDownLargeImageWIthAspectRatio","bestFitScalingFactor: "+bestFitScalingFactor);
+        //Log.i("scaleDownLargeImageWIthAspectRatio","bestFitOutPutDimesions(W:H): "+bestFitWidth+":"+bestFitHeight);
         image=Bitmap.createScaledBitmap(image, bestFitWidth,bestFitHeight, true);
 
         //Position the bitmap centre of the container

@@ -190,7 +190,7 @@ public class MainActivity extends Activity implements LogUtils {
                  TextView myText = new TextView(MainActivity.this);
                  myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
                  myText.setTextSize(24);
-                 myText.setTextColor(Color.WHITE);
+                 myText.setTextColor(Color.argb(255,255, 255, 240));
                  return myText;
              }
          });

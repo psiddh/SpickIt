@@ -80,17 +80,17 @@ public class CustomViewFlipper extends ViewFlipper implements Checkable{
     		mInTagView = false;
     		mPosition = -1;
     	} else {
-    		Log.d("CustomViewFlipper", "Double clicked and in TagView State ?");
+    		//Log.d("CustomViewFlipper", "Double clicked and in TagView State ?");
     		mInTagView = true;
     		mPosition = position;
     	}
     	
-    	Log.d("CustomViewFlipper", "getDisplayedChild () mInTagView - " + getDisplayedChild() + " :  " + mInTagView);
+    	//Log.d("CustomViewFlipper", "getDisplayedChild () mInTagView - " + getDisplayedChild() + " :  " + mInTagView);
     		
     }
     
     public boolean isViewInTagViewState(int position) {
-    	Log.d("CustomViewFlipper", "isViewInTagViewState () mInTagView -" + mInTagView);
+    	//Log.d("CustomViewFlipper", "isViewInTagViewState () mInTagView -" + mInTagView);
     	if (mPosition == -1 || (position != mPosition))
     	  return false;
     	
@@ -110,7 +110,7 @@ public class CustomViewFlipper extends ViewFlipper implements Checkable{
     @Override
     protected void onAttachedToWindow() {
         // This has been detached from Window, so clear the drawable
-    	Log.d("CustomViewFlipper","onAttachedToWindow");
+    	//Log.d("CustomViewFlipper","onAttachedToWindow");
         super.onAttachedToWindow();
     }
 }
