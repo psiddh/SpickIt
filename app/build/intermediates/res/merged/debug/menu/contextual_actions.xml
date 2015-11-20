@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cab_action_done"
+        android:title="@string/done"
+        />
+</menu><!-- From: file:/home/siddartha/PictIt/app/src/main/res/menu/contextual_actions.xml -->

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/displayViewSwitcher"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+ <RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <ProgressBar
+        android:id="@+id/displayViewProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+    />
+    <TextView
+        android:id="@+id/displayViewProgressTextView"
+        android:text="Loading..."
+        android:textColor="#ffffffff"
+        android:textSize="32sp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_above="@+id/displayViewProgressBar"
+        android:gravity="center"/>
+</RelativeLayout>
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+	    <EditText
+	        android:id="@+id/editTextCustomTag"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#f44"
+	        android:hint="@string/defaultText"
+	        android:ellipsize="end"
+	        android:maxLines="1"
+	        android:visibility="gone"
+	        android:layout_weight="6"
+	        android:inputType="textMultiLine" />
+	    
+	    <ImageButton
+	        android:id="@+id/customTagAccept"
+	        android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+	        android:layout_gravity="start"
+	        android:visibility="gone"
+	        android:src="@drawable/ic_navigation_accept"
+	     />
+	    
+	    <ImageButton
+	        android:id="@+id/customTagCancel"
+	        android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+	        android:layout_gravity="start"
+	        android:visibility="gone"
+	        android:src="@drawable/ic_navigation_cancel"
+	     />
+   </LinearLayout>
+   <GridView
+       android:id="@+id/gridview"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:verticalSpacing="0dp"
+       android:horizontalSpacing="0dp"
+       android:scaleType="centerInside"
+       android:adjustViewBounds="true"
+       android:numColumns="@integer/grid_rows"
+       
+   />
+
+</LinearLayout>
+
+</ViewSwitcher>

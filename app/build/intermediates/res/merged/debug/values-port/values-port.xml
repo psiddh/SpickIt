@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/siddartha/PictIt/app/src/main/res/values-port/integers.xml -->
+    <eat-comment/>
+    <item name="grid_rows" type="integer">2</item>
+</resources>
