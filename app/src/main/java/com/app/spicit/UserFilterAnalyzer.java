@@ -357,7 +357,9 @@ public class UserFilterAnalyzer implements LogUtils{
 
     public Pair<Long,Long> getRangeForSingleDateIfValid(Calendar range1, Calendar range2) {
         long offset = 1;
-        if ((range1.isSet(Calendar.MONTH)) && (range1.isSet(Calendar.DAY_OF_MONTH))) {
+        if ((range1.isSet(Calendar.MONTH)) && (range1.isSet(Calendar.DAY_OF_MONTH) && (range1.isSet(Calendar.YEAR)))) {
+            // Don't do any thing - let it pass through
+        } else if ((range1.isSet(Calendar.MONTH)) && (range1.isSet(Calendar.DAY_OF_MONTH))) {
           range1.set(Calendar.YEAR,mRangeMgr.getCurrentYear());
         } else if ((range1.isSet(Calendar.MONTH)) && (range1.isSet(Calendar.YEAR))) {
            range1.set(Calendar.DAY_OF_MONTH,1);
