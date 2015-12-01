@@ -235,7 +235,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
      
      public abstract class DoubleClickOnItemListener implements OnItemClickListener {
 
-    	    private static final long DOUBLE_CLICK_TIME_DELTA = 0;//milliseconds
+    	    private static final long DOUBLE_CLICK_TIME_DELTA = 400;//milliseconds
     	    private static final int SEND_SINGLE_CLICK_EVT = 1;//milliseconds
 
     	    long lastClickTime = 0;
@@ -258,8 +258,8 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                                     View v, int position, long id) {
     	        long clickTime = System.currentTimeMillis();
     	        if (clickTime - lastClickTime < DOUBLE_CLICK_TIME_DELTA){
-    	        	onDoubleItemClick(parent,v,position, id);
-    	        	handler.removeMessages(SEND_SINGLE_CLICK_EVT);
+    	        	//onDoubleItemClick(parent,v,position, id);
+    	        	//handler.removeMessages(SEND_SINGLE_CLICK_EVT);
     	        } else {
     	        	handler.removeMessages(SEND_SINGLE_CLICK_EVT);
                     Message msg = new Message();
@@ -598,7 +598,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         mDisplayImages.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE_MODAL);
         mDisplayImages.setMultiChoiceModeListener(new MultiChoiceModeListener());
         mDisplayImages.setDrawSelectorOnTop(true);
-        
+
         mDisplayImages.setOnItemClickListener(new DoubleClickOnItemListener() {
 			@Override
 			public void onSingleItemClick(int position) {
@@ -631,16 +631,16 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                     return;
                 }
                 String tag = intf.getAttribute("UserTag");
-                
+
                 //Log.d(TAG, "xxxx PATH : " + path + " tag - " + tag );
-                
-               
-                CustomViewFlipper flipper = (CustomViewFlipper) v; 
+
+
+                CustomViewFlipper flipper = (CustomViewFlipper) v;
                 /*if (flipper.getDisplayedChild() == 0) {
                 	//flipper.setOutAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.left_in));
                 	//flipper.setInAnimation(AnimationUtils.loadAnimation(v.getContext(), R.anim.left_out));
                 	AnimatorSet set = new AnimatorSet(); //(AnimatorSet) AnimatorInflater.loadAnimator(v.getContext(),R.anim.left_in);
-                	
+
                 	set.playSequentially(   AnimatorInflater.loadAnimator(v.getContext(),R.animator.right_in),
 				                			AnimatorInflater.loadAnimator(v.getContext(),R.animator.right_out),
 				                			AnimatorInflater.loadAnimator(v.getContext(),R.animator.left_in),
@@ -660,7 +660,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                 if (flipper.getDisplayedChild() == 0) {
                     set = (AnimatorSet) AnimatorInflater.loadAnimator(v.getContext(),R.animator.flip_right);
 
-                	
+
                 } else {
                 	set = (AnimatorSet) AnimatorInflater.loadAnimator(v.getContext(),R.animator.flip_left);
                 }
@@ -678,7 +678,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                     animation = ObjectAnimator.ofFloat(v, "rotationY",  180f, 0.0f);
             		animation.setRepeatCount(0);
             		animation.setInterpolator(new AccelerateDecelerateInterpolator());
-            		
+
                 }
                 animation.addUpdateListener(new AnimatorUpdateListener() {
 					@Override
@@ -692,22 +692,22 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
 								 //flipper.getCurrentView().setRotationY(180);
 							 }
 							 animation.removeAllUpdateListeners();
-							 
+
 						}
 					}
-                	
+
                 });
-                
+
                 animation.setDuration(1000);
                 animation.start();
-                
-                TextView tv = (TextView) ((ViewFlipper) v).getChildAt(1);                
+
+                TextView tv = (TextView) ((ViewFlipper) v).getChildAt(1);
                 if (tag == ""  || tag == null) {
                 	tv.setText("No Tags Yet!");
-                }                
+                }
 			}
         });
-        
+
         /*mDisplayImages.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -937,7 +937,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
 
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             //mState = SelectState.CHERRY_PICK;
-        	mEditTextCustomTag.setVisibility(View.VISIBLE);
+        	//mEditTextCustomTag.setVisibility(View.VISIBLE);
             return true;
         }
 

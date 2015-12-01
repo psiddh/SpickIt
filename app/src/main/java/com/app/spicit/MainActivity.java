@@ -226,6 +226,9 @@ public class MainActivity extends Activity implements LogUtils {
         Message msg = new Message();
         msg.what = SHOW_ANIM_TEXT;
         mTextSwictherHandler.sendMessageDelayed(msg, mTimeOutTextVals);
+
+        Intent msgIntent = new Intent(this, SyncIntentService.class);
+        startService(msgIntent);
     }
 
     @Override
