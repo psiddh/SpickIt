@@ -36,6 +36,8 @@ public class RecyclingImageView extends ImageView implements Checkable{
 
     static final String TAG = "SpickiT> RecyclingImageView";
     private boolean mChecked = false;
+    private boolean mIsBmpSet = false;
+    private int mPosition = -1;
 
     private int mDesiredWidth = 600; //getWidth();;
     private int mDesiredHeight = 400;
@@ -77,6 +79,8 @@ public class RecyclingImageView extends ImageView implements Checkable{
      */
     @Override
     protected void onDetachedFromWindow() {
+        mIsBmpSet = false;
+        mPosition = -1;
         // This has been detached from Window, so clear the drawable
         setImageDrawable(null);
         //Log.d(TAG, "In onDetachedFromWindow");
@@ -104,6 +108,15 @@ public class RecyclingImageView extends ImageView implements Checkable{
 
         // Notify old Drawable so it is no longer being displayed
         notifyDrawable(previousDrawable, false);
+    }
+
+    public boolean isBmpSet(int position) {
+        return mIsBmpSet && (position == mPosition) && false;
+    }
+
+    public void setBmpSet(boolean flag, int position) {
+        mIsBmpSet = flag;
+        mPosition = position;
     }
     
     @Override

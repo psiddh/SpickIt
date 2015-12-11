@@ -231,11 +231,17 @@ public class DataBaseManager extends SQLiteOpenHelper implements LogUtils {
           opendb();
           if (null == mConnectivityManager)
               mConnectivityManager =  (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+          state = SyncState.SYNC_STATE_INPROGRESS;
+          sendBroadcast(state, null, null);
+
           do {
-              state = SyncState.SYNC_STATE_INPROGRESS;
-              sendBroadcast(state, null , null);
+
               if (cur.isClosed()) break;
               int id = cur.getInt(mId);
+
+              //if (mMapCache.containsKey(id))
+              //    continue;
+
               String path = cur.getString(mDataColumn);
 
               // See if the picture exists in DB
@@ -244,6 +250,7 @@ public class DataBaseManager extends SQLiteOpenHelper implements LogUtils {
               if (DEBUG) Log.d(TAG,"Cache Count - " + mMapCache.size());
               if (placeFound != null && placeFound.size() > 0) {
                    // Place found in DB...fill up your pockets now... err cache
+                  if (!mMapCache.containsKey(id))
                    mMapCache.put(id, placeFound);
                    // We have found in DB and updated cache as well.. we are done with this picture
                    
@@ -251,14 +258,13 @@ public class DataBaseManager extends SQLiteOpenHelper implements LogUtils {
                    if (DEBUG) Log.d(TAG,"Cache Count - " + mMapLatLongVals.size());
                    if (latlngFound != null && latlngFound.size() > 0) {                 	  
                  	  latlngFound.add((double) id);
-                 	   mMapLatLongVals.add(latlngFound);
+                       if (!mMapLatLongVals.contains(latlngFound))
+                 	    mMapLatLongVals.add(latlngFound);
                  	   
                  	  mMapIDPathCache.put(Integer.valueOf(id),path);
                    }
                    continue;
               }
-
-              
               
               // Try and fetch it from Internet (GeoDecoder)
               if (DEBUG) Log.d(TAG, "Read from Database ... id : " + id + "  DB Count : " + countRowsinDB());
@@ -310,6 +316,7 @@ public class DataBaseManager extends SQLiteOpenHelper implements LogUtils {
                       lng = geoDecoder.getLong();
                       if (!checkIfPictureExists(id, place) )
                         insertRow(-1, id, place, country, adminArea, lat, lng);
+                  if (!mMapCache.containsKey(id))
                       mMapCache.put(id, placeFound);
                       
                       mMapIDPathCache.put(Integer.valueOf(id),path);
@@ -319,7 +326,8 @@ public class DataBaseManager extends SQLiteOpenHelper implements LogUtils {
                     	  latlngFound.add(lng);
                     	  // This is hack, live with it for now!
                     	  latlngFound.add((double) id);
-                    	  mMapLatLongVals.add(latlngFound);
+                          if (!mMapLatLongVals.contains(latlngFound))
+                              mMapLatLongVals.add(latlngFound);
                       }
               } catch (IOException e) {
                       // TODO Auto-generated catch block

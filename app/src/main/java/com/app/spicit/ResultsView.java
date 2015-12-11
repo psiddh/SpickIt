@@ -1136,14 +1136,19 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
             	viewHolder.imageView.setImageDrawable(drawable);
             } else {
             	mScrollTo = mDisplayImages.getFirstVisiblePosition();
-            	            	//Log.d(TAG, "NOt Quite Returning from this point mScrollTo : " + mScrollTo + "position - " + position + " Last position " + mDisplayImages.getLastVisiblePosition());
-            	if (cancelPotentialWork(position, viewHolder.imageView)) {
-            	  BitmapWorkerTask task = new BitmapWorkerTask(viewHolder.imageView, position);
-            	  final AsyncDrawable asyncDrawable =
-                          new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
-            	  viewHolder.imageView.setImageDrawable(asyncDrawable);
-            	  //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, position+"");
-            	  task.execute(position+"");
+
+            	//Log.d(TAG, "NOt Quite Returning from this point mScrollTo : " + mScrollTo + "position - " + position + " Last position " + mDisplayImages.getLastVisiblePosition());
+                if (cancelPotentialWork(position, viewHolder.imageView)) {
+                    if (!viewHolder.imageView.isBmpSet(position)) {
+                        BitmapWorkerTask task = new BitmapWorkerTask(viewHolder.imageView, position);
+                        final AsyncDrawable asyncDrawable =
+                                new AsyncDrawable(getResources(), mPlaceHolderBitmap, task);
+                        viewHolder.imageView.setImageDrawable(asyncDrawable);
+                        //task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, position + "");
+                        task.execute(position+"");
+
+                    }
+            	  //task.execute(position+"");
             	  
             	}
             }
@@ -1235,14 +1240,14 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
     }
     
     class BitmapWorkerTask extends AsyncTask<String, Void, Bitmap>{
-           private final WeakReference<ImageView> imageViewReference;
+           private final WeakReference<RecyclingImageView> imageViewReference;
            private int data = 0;
            boolean show = true;
            int position = -1;
            //CustomViewFlipper flipper;
-           public BitmapWorkerTask(ImageView imageView, int position) {
+           public BitmapWorkerTask(RecyclingImageView imageView, int position) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
-            imageViewReference = new WeakReference<ImageView>(imageView);
+            imageViewReference = new WeakReference<RecyclingImageView>(imageView);
             //this.flipper = flipper;
             //this.flipper.setDisplayedChild(2);
             this.position = position;
@@ -1304,12 +1309,13 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                }
 
             if (imageViewReference != null && bitmap != null) {
-             final ImageView imageView = (ImageView)imageViewReference.get();
+             final RecyclingImageView imageView = (RecyclingImageView)imageViewReference.get();
              final BitmapWorkerTask bitmapWorkerTask =
                      getBitmapWorkerTask(imageView);
              if (this == bitmapWorkerTask && imageView != null) {
             	 //flipper.setDisplayedChild(0);
-              imageView.setImageBitmap(bitmap);
+                 imageView.setImageBitmap(bitmap);
+                 imageView.setBmpSet(true, position);
               //mImageAdapter.notifyDataSetChanged();
              // mDisplayImages.
              }

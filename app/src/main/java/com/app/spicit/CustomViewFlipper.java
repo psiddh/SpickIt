@@ -103,7 +103,7 @@ public class CustomViewFlipper extends ViewFlipper implements Checkable{
     protected void onDetachedFromWindow() {
         // This has been detached from Window, so clear the drawable
         //Log.d(TAG, "In onDetachedFromWindow");
-    	Log.d("CustomViewFlipper","onDetachedFromWindow");
+    	//Log.d("CustomViewFlipper","onDetachedFromWindow");
         super.onDetachedFromWindow();
     }
 
