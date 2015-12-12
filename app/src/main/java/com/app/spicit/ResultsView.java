@@ -1429,6 +1429,9 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
            options.inJustDecodeBounds = false;
            //options.inSampleSize = 8;
            bitmap = BitmapFactory.decodeByteArray(thumbnail, 0, thumbnail.length, options);
+            newBitmap = ExifUtil.rotateBitmap(path, bitmap);
+            //bitmap.recycle();
+            //bitmap = null;
            //newBitmap = scaleDownLargeImageWithAspectRatio(bitmap);
            /*if (bitmap != null) {
                //newBitmap = Bitmap.createScaledBitmap(bitmap, width, width, true);
@@ -1441,7 +1444,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                    return newBitmap;
                }
            }*/
-           return bitmap;
+           return newBitmap;
         } else  {
            Uri imageUri = null;
             try {
