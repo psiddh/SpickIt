@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import com.app.spicit.AlertDialogFrag.AlertDialogFragment;
 import com.app.spicit.DataBaseManager.SyncState;
+import com.app.spicit.slider.SliderActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
@@ -785,8 +786,8 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
             getMenuInflater().inflate(R.menu.menu_display_view, menu);
             MenuItem item = menu.findItem(R.id.menu_item_pick_all);
             item.setVisible(true);
-            //MenuItem item1 = menu.findItem(R.id.slideshow);
-            //item1.setVisible(true);
+            MenuItem item1 = menu.findItem(R.id.slideshow);
+            item1.setVisible(true);
         }
         if (mShowWarningMenuItem != null) {
             getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -811,8 +812,8 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                 mesg.what = SELECT_ALL_ITEMS;
                 mHandler.sendMessageDelayed(mesg, 100);
                 return true;
-            /*case R.id.slideshow:
-            	Intent intent = new Intent(getBaseContext(), SlideShowActivity.class);
+            case R.id.slideshow:
+            	Intent intent = new Intent(getBaseContext(), SliderActivity.class);
             	ArrayList<Uri> slideShowURIs = new ArrayList<Uri>();
             	for (int index = 0; index < mList.size(); index++) {
                         Uri imageUri = Uri.parse("file://" + mList.get(index));
@@ -821,7 +822,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                 }
             	intent.putParcelableArrayListExtra("uriList", slideShowURIs);
                 startActivity(intent);
-            	break;*/
+            	break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -1409,7 +1410,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ) {
             //width = height;
         }
-        if (intf.hasThumbnail() ) {
+        if (intf.hasThumbnail()) {
            byte[] thumbnail = intf.getThumbnail();
            BitmapFactory.Options options = new BitmapFactory.Options();
            options.inJustDecodeBounds = true;

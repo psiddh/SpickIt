@@ -50,7 +50,7 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name="com.app.spicit.SlideShowActivity"
+            android:name="com.app.spicit.slider.SliderActivity"
             android:label="@string/app_name">
         </activity>
          <service android:enabled="true" android:name=".SyncIntentService"></service>
