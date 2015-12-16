@@ -128,7 +128,7 @@ public class SliderActivity extends FragmentActivity {
 		//mPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
 		ballsView = (BallView) findViewById(R.id.balls);
-		mPager.setPageTransformer(false, new ZoomOutPageTransformer());
+		//mPager.setPageTransformer(false, new ZoomOutPageTransformer());
 		//mPager.setBackgroundResource(R.drawable.empty_photo);
 		mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 			@Override
