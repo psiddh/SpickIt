@@ -56,13 +56,10 @@ public class MainActivity extends Activity implements LogUtils {
 
     private ProgressBar mProgress;
     private EditText mEditText;
-    ImageButton mImgButton = null;
-    
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
+    private ImageButton mImgButton = null;
+
+    private AppState appState;
+
     
     private String TAG = "SpickIt> MainView";
 
@@ -351,7 +348,9 @@ public class MainActivity extends Activity implements LogUtils {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);        
+        setContentView(R.layout.main_activity);
+
+        appState = new AppState();
         setupTextSwitcher();
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);

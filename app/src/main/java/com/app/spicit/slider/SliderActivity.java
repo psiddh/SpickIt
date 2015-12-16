@@ -16,7 +16,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.app.spicit.R;
+import com.github.glomadrian.loadingballs.BallView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -53,8 +58,9 @@ public class SliderActivity extends FragmentActivity {
 	private ArrayList<Parcelable> mImageParcelableURI;
 
 	private ActionBar mActBar = null;
+	private BallView ballsView;
 
-
+	private int currentPosition = -1;
 
 	private class SliderAdapter extends PagerAdapter {
 
@@ -73,19 +79,31 @@ public class SliderActivity extends FragmentActivity {
 
 		@Override
 		public boolean isViewFromObject(View view, Object object) {
-			return view == ((LinearLayout) object);
+			return view.equals(object);
 		}
 
 		@Override
-		public Object instantiateItem(ViewGroup container, int position) {
-			View itemView = mLayoutInflater.inflate(R.layout.slider_item, container, false);
+		public Object instantiateItem(final ViewGroup container, int position) {
+			final View itemView = mLayoutInflater.inflate(R.layout.slider_item, container, false);
 
 			//final LinearLayout linearLayout = (LinearLayout) mLayoutInflater.inflate(R.layout.layout_slider, null);
 			final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
-			final ProgressBar spinner = (ProgressBar) itemView.findViewById(R.id.loading);
-			spinner.setVisibility(View.VISIBLE);
-			LoadImageTask task = new LoadImageTask(imageView, container, itemView, position, spinner);
+
+			LoadImageTask task = new LoadImageTask(imageView, container, itemView, position);
 			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			//task.execute();
+
+
+			/*Uri uri = (Uri) mImageParcelableURI.get(position);
+			Bitmap bmp = decodeSampledBitmapFromResource(uri.getPath(), 300, 300);
+
+			if (bmp == null) {
+				bmp = BitmapFactory.decodeResource(container.getResources(),
+						R.drawable.empty_photo);
+			}
+			imageView.setImageBitmap(bmp);
+			container.addView(itemView);*/
+
 			return itemView;
 
 		}
@@ -107,15 +125,99 @@ public class SliderActivity extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new SliderAdapter(this);
 		mPager.setAdapter(mPagerAdapter);
+		//mPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
+
+		ballsView = (BallView) findViewById(R.id.balls);
 		mPager.setPageTransformer(false, new ZoomOutPageTransformer());
+		//mPager.setBackgroundResource(R.drawable.empty_photo);
+		mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+			}
+
+			@Override
+			public void onPageSelected(int position) {
+				currentPosition = position;
+				invalidateOptionsMenu();
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				if (ViewPager.SCROLL_STATE_DRAGGING == state || ViewPager.SCROLL_STATE_SETTLING == state) {
+					ballsView.setVisibility(View.VISIBLE);
+					// TBD: Is this needed ? I guess no
+					//mPager.requestDisallowInterceptTouchEvent(false);
+				} else {
+					ballsView.setVisibility(View.GONE);
+					//mPager.requestDisallowInterceptTouchEvent(true);
+
+				}
+			}
+		});
+
+		mPager.setOffscreenPageLimit(2);
 
 		mActBar = getActionBar();
 		mActBar.setHomeButtonEnabled(true);
 		mActBar.setDisplayHomeAsUpEnabled(true);
+		mActBar.setDisplayShowTitleEnabled(false);
+
 	}
 
 	@Override
 	public void onBackPressed() {
+		// If the user is currently looking at the first step, allow the system to handle the
+		// Back button. This calls finish() on this activity and pops the back stack.
+		super.onBackPressed();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				onBackPressed();
+				break;
+			case R.id.menu_back:
+				backMenuPressed();
+				invalidateOptionsMenu();
+				break;
+			case R.id.menu_forward:
+				nextMenuPressed();
+				invalidateOptionsMenu();
+				break;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_slider, menu);
+
+		int totalCount = mPager.getAdapter().getCount();
+
+		MenuItem title = menu.findItem(R.id.title);
+		MenuItem back = menu.findItem(R.id.menu_back);
+		MenuItem forward = menu.findItem(R.id.menu_forward);
+
+		title.setTitle("SlideShow " + ((currentPosition == -1) ? 1 : currentPosition + 1) + "/" + totalCount);
+		if (currentPosition + 1  == totalCount) {
+			forward.setEnabled(false);
+		} else {
+			//back.setEnabled(true);
+			forward.setEnabled(true);
+		}
+
+
+		return true;
+	}
+
+	private void updateMenuItemTitle() {
+
+	}
+
+	private void backMenuPressed() {
 		if (mPager.getCurrentItem() == 0) {
 			// If the user is currently looking at the first step, allow the system to handle the
 			// Back button. This calls finish() on this activity and pops the back stack.
@@ -126,14 +228,13 @@ public class SliderActivity extends FragmentActivity {
 		}
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				onBackPressed();
-				break;
+	private void nextMenuPressed() {
+		if (mPager.getCurrentItem() == mPager.getAdapter().getCount() ) {
+
+		} else {
+			// Otherwise, select the previous step.
+			mPager.setCurrentItem(mPager.getCurrentItem() + 1);
 		}
-		return false;
 	}
 
 	private static Bitmap decodeSampledBitmapFromResource(String strPath,int reqWidth, int reqHeight) {
@@ -176,17 +277,17 @@ public class SliderActivity extends FragmentActivity {
 		private final WeakReference<ImageView> imageViewReference;
 		private final WeakReference<ViewGroup> viewGroupReference;
 		private final WeakReference<View> itemViewReference;
-		private final WeakReference<ProgressBar> spinnerReference;
+		//private final WeakReference<ProgressBar> spinnerReference;
 
 
 		private int position;
 
-		public LoadImageTask(ImageView imageView, ViewGroup container, View itemView, int pos, ProgressBar spinner) {
+		public LoadImageTask(ImageView imageView, ViewGroup container, View itemView, int pos) {
 			imageViewReference = new WeakReference<ImageView>(imageView);
 			viewGroupReference = new WeakReference<ViewGroup>(container);
 			itemViewReference = new WeakReference<View>(itemView);
+			//spinnerReference = new WeakReference<ProgressBar>(spinner);
 			position = pos;
-			spinnerReference = new WeakReference<ProgressBar>(spinner);
 		}
 
 		@Override
@@ -197,29 +298,30 @@ public class SliderActivity extends FragmentActivity {
 
 		@Override
 		protected void onPreExecute() {
-			ProgressBar spinner = spinnerReference.get();
+			ImageView imageView = imageViewReference.get();
+			int i = imageView.getVisibility();
+			/*ProgressBar spinner = spinnerReference.get();
 			if (spinner == null)
 				return;
-			spinner.setVisibility(View.VISIBLE);
+			spinner.setVisibility(View.VISIBLE);*/
 		}
 
 		@Override
 		protected void onPostExecute(Bitmap bmp) {
 
-			ProgressBar spinner = spinnerReference.get();
+			/*ProgressBar spinner = spinnerReference.get();
 			if (spinner != null) {
 				spinner.setVisibility(View.GONE);
-			}
+			}*/
 			ImageView imageView = imageViewReference.get();
 			ViewGroup container = viewGroupReference.get();
 			View itemView = itemViewReference.get();
 
 			if (imageView == null || container == null || itemView == null)
 				return;
-
 			//ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
 			imageView.setImageBitmap(bmp);
-			container.addView(itemView);
+			container.addView(itemView, 0);
 		}
 	}
 
@@ -241,16 +343,15 @@ public class SliderActivity extends FragmentActivity {
 		public void transformPage(View view, float position) {
 			final ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
 
-			if (!hasImage(imageView))  {
+			/*if (!hasImage(imageView))  {
 				return;
-			}
+			}*/
 			int pageWidth = view.getWidth();
 			int pageHeight = view.getHeight();
 
 			if (position < -1) { // [-Infinity,-1)
 				// This page is way off-screen to the left.
 				view.setAlpha(0);
-
 			} else if (position <= 1) { // [-1,1]
 				// Modify the default slide transition to shrink the page as well
 				float scaleFactor = Math.max(MIN_SCALE, 1 - Math.abs(position));
@@ -270,6 +371,8 @@ public class SliderActivity extends FragmentActivity {
 				view.setAlpha(MIN_ALPHA +
 						(scaleFactor - MIN_SCALE) /
 								(1 - MIN_SCALE) * (1 - MIN_ALPHA));
+
+
 
 			} else { // (1,+Infinity]
 				// This page is way off-screen to the right.

@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/menu_back"
+       android:icon="@android:drawable/ic_media_previous"
+       android:title="back"
+
+          android:menuCategory="alternative"
+       android:showAsAction="always"
+       android:visible="true"/>
+
+    <item android:id="@+id/title"
+          android:title="status"
+          android:menuCategory="alternative"
+          android:showAsAction="always"
+          android:visible="true"/>
+
+    <item android:id="@+id/menu_forward"
+          android:menuCategory="alternative"
+          android:icon="@android:drawable/ic_media_next"
+       android:title="next"
+       android:showAsAction="always"
+       android:visible="true"/>
+
+</menu>

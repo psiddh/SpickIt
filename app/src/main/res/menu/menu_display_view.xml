@@ -7,7 +7,7 @@
      android:visible="false"/>
    
    <item android:id="@+id/slideshow"
-       android:icon="@android:drawable/ic_media_next"
+       android:icon="@android:drawable/ic_menu_slideshow"
        android:title="slide show"
        android:showAsAction="always"
        android:visible="false"/>

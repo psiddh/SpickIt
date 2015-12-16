@@ -439,7 +439,7 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
             mUserFilterContainsAPLACES = mDbHelper.retreiveAllPlacesFromStringIfExists(mUserFilter);
         } else if (mDbHelper.getState() == DataBaseManager.SyncState.SYNC_STATE_INPROGRESS) {
             TextView txtView = (TextView) mViewSwitcher.findViewById(R.id.displayViewProgressTextView);
-            txtView.setText("Please wait, Loading pictures may take a while! Background Sync is still in-progress");
+            txtView.setText("Please wait, Your Moments in a moment!");
         }
         
         mDrawable = getResources().getDrawable(R.drawable.bggrid);
