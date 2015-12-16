@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.app.spicit.ExifUtil;
 import com.app.spicit.R;
 import com.github.glomadrian.loadingballs.BallView;
 
@@ -293,7 +294,7 @@ public class SliderActivity extends FragmentActivity {
 		@Override
 		protected Bitmap doInBackground(String... arg0) {
 			Uri uri = (Uri) mImageParcelableURI.get(position);
-			return decodeSampledBitmapFromResource(uri.getPath(), 300, 300);
+			return ExifUtil.rotateBitmap(uri.getPath(), decodeSampledBitmapFromResource(uri.getPath(), 300, 300));
 		}
 
 		@Override

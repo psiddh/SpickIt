@@ -4,7 +4,13 @@
      android:id="@+id/menu_item_share"  
      android:actionProviderClass="android.widget.ShareActionProvider"  
      android:showAsAction="ifRoom"  
-     android:title="Share"/> 
+     android:title="Share"/>
+
+    <item android:id="@+id/slideshow"
+          android:icon="@android:drawable/ic_menu_slideshow"
+          android:title="slide show"
+          android:showAsAction="always"
+          android:visible="true"/>
      
 
 

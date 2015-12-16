@@ -601,34 +601,34 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         mDisplayImages.setDrawSelectorOnTop(true);
 
         mDisplayImages.setOnItemClickListener(new DoubleClickOnItemListener() {
-			@Override
-			public void onSingleItemClick(int position) {
-				Intent intent = new Intent();
+            @Override
+            public void onSingleItemClick(int position) {
+                Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 Uri imageUri = Uri.parse("file://" + mList.get(position));
                 intent.setDataAndType(imageUri, "image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 //intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivity(intent);
-			}
+            }
 
-			@Override
-			public void onDoubleItemClick(AdapterView<?> parent, final View v,
-					                      int position, long id) {
-				ExifInterface intf = null;
-				if (mList.size() == 0 || mList == null)
-					return;
+            @Override
+            public void onDoubleItemClick(AdapterView<?> parent, final View v,
+                                          int position, long id) {
+                ExifInterface intf = null;
+                if (mList.size() == 0 || mList == null)
+                    return;
                 String path = mList.get(position);
                 //Log.d(TAG, "path " + path);
                 if (path == null || path == "")
-                	return;
+                    return;
                 try {
                     intf = new ExifInterface(path);
-                } catch(IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                if(intf == null) {
+                if (intf == null) {
                     return;
                 }
                 String tag = intf.getAttribute("UserTag");
@@ -672,30 +672,30 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                 //flipper.setInAnimation(null);
                 ObjectAnimator animation;
                 if (flipper.getDisplayedChild() == 0) {
-                	animation = ObjectAnimator.ofFloat(v, "rotationY", 0.0f, 180.0f);
-            		animation.setRepeatCount(0);
-            		animation.setInterpolator(new AccelerateDecelerateInterpolator());
+                    animation = ObjectAnimator.ofFloat(v, "rotationY", 0.0f, 180.0f);
+                    animation.setRepeatCount(0);
+                    animation.setInterpolator(new AccelerateDecelerateInterpolator());
                 } else {
-                    animation = ObjectAnimator.ofFloat(v, "rotationY",  180f, 0.0f);
-            		animation.setRepeatCount(0);
-            		animation.setInterpolator(new AccelerateDecelerateInterpolator());
+                    animation = ObjectAnimator.ofFloat(v, "rotationY", 180f, 0.0f);
+                    animation.setRepeatCount(0);
+                    animation.setInterpolator(new AccelerateDecelerateInterpolator());
 
                 }
                 animation.addUpdateListener(new AnimatorUpdateListener() {
-					@Override
-					public void onAnimationUpdate(ValueAnimator animation) {
-						// TODO Auto-generated method stub
-						float val = animation.getAnimatedFraction();
-						if (val >= 0.5 ) {
-							 CustomViewFlipper flipper = (CustomViewFlipper) v;
-							 flipper.setDisplayedChild(1);
-							 if (flipper.getDisplayedChild() == 1) {
-								 //flipper.getCurrentView().setRotationY(180);
-							 }
-							 animation.removeAllUpdateListeners();
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        // TODO Auto-generated method stub
+                        float val = animation.getAnimatedFraction();
+                        if (val >= 0.5) {
+                            CustomViewFlipper flipper = (CustomViewFlipper) v;
+                            flipper.setDisplayedChild(1);
+                            if (flipper.getDisplayedChild() == 1) {
+                                //flipper.getCurrentView().setRotationY(180);
+                            }
+                            animation.removeAllUpdateListeners();
 
-						}
-					}
+                        }
+                    }
 
                 });
 
@@ -703,10 +703,10 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
                 animation.start();
 
                 TextView tv = (TextView) ((ViewFlipper) v).getChildAt(1);
-                if (tag == ""  || tag == null) {
-                	tv.setText("No Tags Yet!");
+                if (tag == "" || tag == null) {
+                    tv.setText("No Tags Yet!");
                 }
-			}
+            }
         });
 
         /*mDisplayImages.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -815,10 +815,9 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
             case R.id.slideshow:
             	Intent intent = new Intent(getBaseContext(), SliderActivity.class);
             	ArrayList<Uri> slideShowURIs = new ArrayList<Uri>();
-            	for (int index = 0; index < mList.size(); index++) {
-                        Uri imageUri = Uri.parse("file://" + mList.get(index));
-                        slideShowURIs.add(imageUri);
-                    
+                for (int index = 0; index < mList.size(); index++) {
+                    Uri imageUri = Uri.parse("file://" + mList.get(index));
+                    slideShowURIs.add(imageUri);
                 }
             	intent.putParcelableArrayListExtra("uriList", slideShowURIs);
                 startActivity(intent);
@@ -943,7 +942,21 @@ public class ResultsView extends Activity implements LoaderCallbacks<Cursor>, Lo
         }
 
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.slideshow:
+                    Intent intent = new Intent(getBaseContext(), SliderActivity.class);
+                    ArrayList<Uri> slideShowURIs = new ArrayList<Uri>();
+                    for (Uri imageUri : mImageUris) {
+                        slideShowURIs.add(imageUri);
+                    }
+
+                    intent.putParcelableArrayListExtra("uriList", slideShowURIs);
+                    startActivity(intent);
+                    return true;
+            }
+
             return false;
+
         }
 
         public void onDestroyActionMode(ActionMode mode) {
